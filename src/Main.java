@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import data.*;
 
 public class Main implements ActionListener {
     private int count = 0;
@@ -19,7 +20,8 @@ public class Main implements ActionListener {
 
         panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));
-        panel.setLayout(new GridLayout(0,1));
+        tableInput();
+        panel.setLayout(new GridLayout(3, 2));
         panel.add(button);
         panel.add(label);
 
@@ -27,6 +29,32 @@ public class Main implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+
+    }
+
+
+    public void tableInput(){
+        String[][] data = {
+                { "Kundan Kumar Jha", "4031", "CSE" },
+                { "Anand Jha", "6014", "IT" }
+        };
+
+        // Column Names 
+        String[] columnNames = { "Name", "Roll Number", "Department" };
+
+        // Initializing the JTable 
+        JTable j = new JTable(data, columnNames);
+        j.setBounds(30, 100, 200, 300);
+
+        // adding it to JScrollPane 
+        JScrollPane sp = new JScrollPane(j);
+        frame.add(sp);
+        // Frame Size
+        frame.setSize(500, 200);
+        // Frame Visible = true
+        frame.setVisible(true);
+
     }
 
     public static void main(String args[]) {
