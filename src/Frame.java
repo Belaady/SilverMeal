@@ -214,14 +214,20 @@ class Frame extends JFrame implements ActionListener {
 
         //Buat print isi table dulu
         else if (e.getSource() == calculate) {
+            ArrayList<Integer> listDemand = new ArrayList<>();
+
+            //Get demand
+            for(int i =0; i<tableModel.getRowCount(); i++){
+                listDemand.add(Integer.parseInt(tableModel.getValueAt(i,1).toString()));
+            }
+
+            //Cek isi table
             Vector dataTable =  tableModel.getDataVector();
             System.out.println(dataTable);
-            ArrayList<String> listDemand = new ArrayList<>();
 
-//            for(Object i : dataTable) {
-//                listDemand.add(i[1].to);
-//            }
-//            System.out.println(dataTable.get(0).);
+            //Print Demand
+            System.out.println(listDemand);
+
 
         }
 
