@@ -9,7 +9,9 @@ import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
+import data.*;
 
 class Frame extends JFrame implements ActionListener {
 
@@ -214,11 +216,15 @@ class Frame extends JFrame implements ActionListener {
 
         //Buat print isi table dulu
         else if (e.getSource() == calculate) {
-            ArrayList<Integer> listDemand = new ArrayList<>();
+
+
+//            ArrayList<Integer> listDemand = new ArrayList<>();
+            int[] listDemand = new int[tableModel.getRowCount()];
 
             //Get demand
             for(int i =0; i<tableModel.getRowCount(); i++){
-                listDemand.add(Integer.parseInt(tableModel.getValueAt(i,1).toString()));
+//                listDemand.add(Integer.parseInt(tableModel.getValueAt(i,1).toString()));
+                listDemand[i] = Integer.parseInt(tableModel.getValueAt(i,1).toString());
             }
 
             //Cek isi table
@@ -227,10 +233,80 @@ class Frame extends JFrame implements ActionListener {
 
             //Print Demand
             System.out.println(listDemand);
+            countModif(listDemand);
 
 
         }
 
+    }
+
+    private void countModif(int[] listDemand) {
+        StringBuilder result = new StringBuilder();
+        int period = Integer.parseInt(tperiod.getText());
+        double setup = Double.parseDouble(tsetup.getText());
+        double saving = Double.parseDouble(tsaving.getText());
+
+        // ini buat waktu gmn ya hm
+
+        int stats = 0;
+        int skip = 0;
+
+        ArrayList<data> rest = new ArrayList<>();
+
+        while(stats<period){
+            data temp = new data();
+            if (rest.size() < 1)
+            {
+                temp.setPeriod("1");
+                temp.setT(1);
+                temp.setTotalSetup(setup);
+                temp.setSavingSum(0);
+                temp.setSavingFee(0);
+                temp.setDiff(setup);
+                temp.setStatus("Next");
+                temp.setAccumCost(0);
+                temp.setQuantity(listDemand[0]);
+            }
+            else
+            {
+                data restPart = rest.get(stats - 1);
+                int jj = stats + 1;
+
+                //Ini masih salah ga ngerti
+                //demand.Skip(skip).Take(jj - skip).Sum() ini code c# nya
+
+                int param=0;
+                for(int x = skip; x<(jj-skip); x++)
+                {
+                    param+=listDemand[x];
+                }
+                double tempSavingSum = restPart.getSavingSum() + (restPart.getT() * listDemand[stats] * param);
+
+                double tempSavingFee = (saving * tempSavingSum) / param;
+                double tempDiff = setup - tempSavingFee;
+                String tempPeriod = restPart.getPeriod() + "," + String.valueOf(jj);
+
+
+                //-------------ini bingun----------------//
+//                var tempStatus = Math.Abs(tempDiff) <= restPart.Diff ? "Next" : "Stop";
+
+
+                double tempAccumCost = restPart.AccumCost + (listDemand[stats] * restPart.getT());
+
+
+                //-----------ini nge set tapi belum ku ubah
+//                temp.Period = restPart.Status.Equals("Print") ? jj.ToString() : tempPeriod;
+//                temp.T = restPart.Status.Equals("Print") ? 1 : (restPart.T + 1);
+//                temp.TotalSetup = setup;
+//                temp.SavingSum = restPart.Status.Equals("Print") ? 0 : tempSavingSum;
+//                temp.SavingFee = restPart.Status.Equals("Print") ? 0 : tempSavingFee;
+//                temp.Diff = restPart.Status.Equals("Print") ? setup : Math.Abs(tempDiff);
+//                temp.Status = restPart.Status.Equals("Print") ? "Next" : tempStatus;
+//                temp.AccumCost = restPart.Status.Equals("Print") ? 0 : tempAccumCost;
+//                temp.Quantity = restPart.Status.Equals("Print") ? demand[stats] : (restPart.Quantity + demand[stats]);
+
+            }
+        }
     }
 }
 
