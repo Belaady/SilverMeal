@@ -8,9 +8,9 @@ import javax.swing.table.TableColumnModel;
 import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
+
 import data.*;
 
 class Frame extends JFrame implements ActionListener {
@@ -129,7 +129,7 @@ class Frame extends JFrame implements ActionListener {
 
         JScrollPane sp = new JScrollPane(table);
         sp.setFont(new Font("Arial", Font.PLAIN, 20));
-        sp.setSize(400, 100);
+        sp.setSize(400, 175);
         sp.setLocation(30,310);
         c.add(sp);
 
@@ -137,7 +137,7 @@ class Frame extends JFrame implements ActionListener {
         calculate = new JButton("calculate");
         calculate.setFont(new Font("Arial", Font.PLAIN, 15));
         calculate.setSize(100, 20);
-        calculate.setLocation(270, 420);
+        calculate.setLocation(270, 500);
         calculate.addActionListener(this);
         c.add(calculate);
 
@@ -154,7 +154,7 @@ class Frame extends JFrame implements ActionListener {
         res = new JLabel("");
         res.setFont(new Font("Arial", Font.PLAIN, 20));
         res.setSize(500, 25);
-        res.setLocation(150, 500);
+        res.setLocation(150, 530);
         c.add(res);
 
         resadd = new JTextArea();
@@ -189,10 +189,12 @@ class Frame extends JFrame implements ActionListener {
                     + "Saving Cost : "
                     + tsaving.getText() + "\n";
 
+            //Create table
             int hehe = Integer.parseInt(tperiod.getText());
             for(int i =0; i<hehe; i++){
                 tableModel.addRow(new Object[] { i+1});
             }
+
             tout.setText(data);
             tout.setEditable(false);
             res.setText("Calculation success!");
@@ -214,7 +216,9 @@ class Frame extends JFrame implements ActionListener {
             term.setSelected(false);
         }
 
+
         //Buat print isi table dulu
+        //BUAT CALCULATE
         else if (e.getSource() == calculate) {
 
 
@@ -229,11 +233,24 @@ class Frame extends JFrame implements ActionListener {
 
             //Cek isi table
             Vector dataTable =  tableModel.getDataVector();
-            System.out.println(dataTable);
+//            System.out.println(dataTable);
 
             //Print Demand
-            System.out.println(listDemand);
-            countModif(listDemand);
+            double setup = Double.parseDouble(tsetup.getText());
+            double saving = Double.parseDouble(tsaving.getText());
+            for
+            (int r=0; r< listDemand.length; r++){
+                System.out.print(listDemand[r]);
+
+            }
+
+
+//            //Count modif
+//            countModif(listDemand);
+//
+//            //WW
+            countWW(listDemand);
+
 
 
         }
@@ -308,5 +325,70 @@ class Frame extends JFrame implements ActionListener {
             }
         }
     }
+
+    private void countWW(int[] listDemand) {
+
+        //Initiate component
+        List<List<Double>> myList = new ArrayList<List<Double>>();
+        int period = Integer.parseInt(tperiod.getText());
+        double setup = Double.parseDouble(tsetup.getText());
+        double saving = Double.parseDouble(tsaving.getText());
+
+        List<Double> minToBuy = new ArrayList<>();
+
+        //Start list awal
+        List<Double> start = new ArrayList<>();
+        start.add(setup);
+        myList.add(start);
+
+        //For first row
+        for (int y = 1; y < period; y++) {
+            List<Double> afbefore = new ArrayList<>(myList.get(y - 1));
+            List<Double> nextMonth = new ArrayList<>();
+            double result2 = afbefore.get(0) + listDemand[y] * saving * y;
+            nextMonth.add(Math.round(result2 * 100.0) / 100.0);
+            myList.add(nextMonth);
+        }
+
+        //Second until end
+        for(int x=1; x< period; x++) {
+            List<Double> afbefore = new ArrayList<>(myList.get(x - 1));
+            Collections.sort(afbefore);
+            double result2 = afbefore.get(0) + setup;
+            myList.get(x).add(Math.round(result2 * 100.0) / 100.0);
+            for (int z = x+1; z < period; z++) {
+                List<Double> before = new ArrayList<>(myList.get(z - 1));
+                double result = before.get(x) + listDemand[z] * saving * (z-x);
+                myList.get(z).add(Math.round(result * 100.0) / 100.0);
+            }
+        }
+
+        //Checking all array
+        System.out.println(myList);
+
+        //Check when to buy
+        for(int bela =0; bela<period; bela++){
+            List<Double> findMin = new ArrayList<>(myList.get(bela));
+            Collections.sort(findMin);
+            double minValue = findMin.get(0);
+            minToBuy.add(minValue);
+            int indexValue = myList.get(bela).indexOf(minValue);
+            int via = bela+1;
+            if(indexValue==bela){
+
+                System.out.println("Beli pada bulan ke-"+via+" dengan harga "+minValue);
+            }
+            else {
+                System.out.println("Tidak ada pembelian pada bulan ke-"+via);
+            }
+        }
+
+        System.out.println(minToBuy);
+
+    }
+
+
+
 }
+
 
