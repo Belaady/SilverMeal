@@ -335,6 +335,8 @@ class Frame extends JFrame implements ActionListener {
         double saving = Double.parseDouble(tsaving.getText());
 
         List<Double> minToBuy = new ArrayList<>();
+        List<Integer> buyingMonth = new ArrayList<Integer>();
+        List<Integer> totalDemand = new ArrayList<Integer>();
 
         //Start list awal
         List<Double> start = new ArrayList<>();
@@ -367,23 +369,70 @@ class Frame extends JFrame implements ActionListener {
         System.out.println(myList);
 
         //Check when to buy
-        for(int bela =0; bela<period; bela++){
-            List<Double> findMin = new ArrayList<>(myList.get(bela));
+        for(int month =period-1; month>-1; month--){
+            List<Double> findMin = new ArrayList<>(myList.get(month));
             Collections.sort(findMin);
             double minValue = findMin.get(0);
-            minToBuy.add(minValue);
-            int indexValue = myList.get(bela).indexOf(minValue);
-            int via = bela+1;
-            if(indexValue==bela){
 
-                System.out.println("Beli pada bulan ke-"+via+" dengan harga "+minValue);
+            int indexValue = myList.get(month).indexOf(minValue);
+            int via = month+1;
+            if(indexValue==month){
+
+//                System.out.println("Beli pada bulan ke-"+via+" dengan harga "+minValue);
+                buyingMonth.add(via);
+                minToBuy.add(minValue);
             }
             else {
-                System.out.println("Tidak ada pembelian pada bulan ke-"+via);
+
+                int bela = indexValue+1;
+                List<Double> jumpColumn = new ArrayList<>(myList.get(indexValue));
+                Collections.sort(jumpColumn);
+                double minJump = jumpColumn.get(0);
+
+//                System.out.println(" Masuk loop Beli pada bulan ke-"+bela+" dengan harga "+ minJump);
+                minToBuy.add(minJump);
+                buyingMonth.add(bela);
+                month=indexValue;
+
             }
         }
+        Collections.reverse(buyingMonth);
+        Collections.reverse(minToBuy);
+        for(int col=0; col<buyingMonth.size(); col++){
+            int jumlah =0;
+            int param =0;
+            int value=0;
+            if (col<buyingMonth.size()-1){
+                param+=col+1;
+                value = buyingMonth.get(param);
+            }
+            else{
+                value = period+1;
 
-        System.out.println(minToBuy);
+            }
+
+//            System.out.println("Ini value " + value);
+//            System.out.println("Ini col " + col);
+
+            for(int b= buyingMonth.get(col)-1; b<value-1; b++){
+                jumlah+= listDemand[b];
+//                System.out.println(listDemand[b]);
+//                System.out.println("ini col"+ b +" Ini jumlah " + jumlah);
+            }
+            totalDemand.add(jumlah);
+
+        }
+        System.out.println( "ini minimal harga pembelian " + minToBuy);
+        System.out.println("Ini bulan pembelian " + buyingMonth);
+        System.out.println("total demand tiap pembelian " + totalDemand);
+        List<Double> listTotalCost = new ArrayList<>( myList.get(myList.size()-1));
+        Collections.sort(listTotalCost);
+        double totalCost = listTotalCost.get(0);
+        for(int r=0; r< buyingMonth.size(); r++){
+            System.out.println("Beli pada bulan " +buyingMonth.get(r)+ " dengan jumlah " + totalDemand.get(r));
+
+        }
+        System.out.println("Dengan Total Cost :" + totalCost);
 
     }
 
