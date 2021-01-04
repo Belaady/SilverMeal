@@ -429,7 +429,7 @@ class Frame extends JFrame implements ActionListener {
         Collections.sort(listTotalCost);
         double totalCost = listTotalCost.get(0);
         for(int r=0; r< buyingMonth.size(); r++){
-            System.out.println("Beli pada bulan " +buyingMonth.get(r)+ " dengan jumlah " + totalDemand.get(r));
+            System.out.println("Beli pada periode " +buyingMonth.get(r)+ " dengan jumlah demand " + totalDemand.get(r));
 
         }
         System.out.println("Dengan Total Cost :" + totalCost);
