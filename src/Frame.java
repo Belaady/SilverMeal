@@ -3,7 +3,13 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.xml.crypto.Data;
+//import javax.xml.crypto.Data;
+//import java.time.Duration;
+//import java.time.Instant;
+//import java.util.concurrent.TimeUnit;
+//import static java.time.temporal.ChronoUnit.SECONDS;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -271,8 +277,14 @@ class Frame extends JFrame implements ActionListener {
             }
             
             // WW
-            if (WW.isSelected()) { 
+            if (WW.isSelected()) {
+                List result = countWW(listDemand);
                 System.out.println("MASHOKK WW");
+                for (int v=0; v< result.size();v++){
+                    System.out.println(result.get(v));
+
+                }
+
             }
 
             // SM
@@ -290,16 +302,19 @@ class Frame extends JFrame implements ActionListener {
 
     }
 
-    private void countWW(int[] listDemand) {
+    private List countWW(int[] listDemand) {
         //Initiate component
         List<List<Double>> myList = new ArrayList<List<Double>>();
         int period = Integer.parseInt(tperiod.getText());
         double setup = Double.parseDouble(tsetup.getText());
         double saving = Double.parseDouble(tsaving.getText());
+        List<String> resultWW = new ArrayList<>();
 
         List<Double> minToBuy = new ArrayList<>();
         List<Integer> buyingMonth = new ArrayList<Integer>();
         List<Integer> totalDemand = new ArrayList<Integer>();
+
+        long startTime = System.nanoTime();
 
         //Start list awal
         List<Double> start = new ArrayList<>();
@@ -385,6 +400,17 @@ class Frame extends JFrame implements ActionListener {
             totalDemand.add(jumlah);
 
         }
+
+        long endTime = System.nanoTime();
+
+        // get difference of two nanoTime values
+        long timeElapsed = endTime - startTime;
+
+        System.out.println("Execution time in nanoseconds  : " + timeElapsed);
+
+        System.out.println("Execution time in milliseconds : " +
+                timeElapsed / 1000000);
+
         System.out.println( "ini minimal harga pembelian " + minToBuy);
         System.out.println("Ini bulan pembelian " + buyingMonth);
         System.out.println("Total demand tiap pembelian " + totalDemand);
@@ -392,10 +418,16 @@ class Frame extends JFrame implements ActionListener {
         Collections.sort(listTotalCost);
         double totalCost = listTotalCost.get(0);
         for(int r=0; r< buyingMonth.size(); r++){
-            System.out.println("Beli pada periode " +buyingMonth.get(r)+ " dengan jumlah demand " + totalDemand.get(r));
+            resultWW.add("Beli pada periode " +buyingMonth.get(r)+ " dengan jumlah demand " + totalDemand.get(r));
 
         }
-        System.out.println("Dengan Total Cost :" + totalCost);
+        resultWW.add("Dengan Total Cost :" + totalCost);
+        resultWW.add("Execution time in nanoseconds  : " + timeElapsed);
+
+        resultWW.add("Execution time in milliseconds : " +
+                timeElapsed / 1000000);
+
+        return resultWW;
 
     }
 
