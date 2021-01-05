@@ -189,16 +189,17 @@ class Frame extends JFrame implements ActionListener {
         tout.setEditable(false);
         c.add(tout);
 
+        //Calculation success
         res = new JLabel("");
         res.setFont(new Font("Arial", Font.PLAIN, 20));
         res.setSize(500, 25);
-        res.setLocation(150, 530);
+        res.setLocation(150, 580);
         c.add(res);
 
         resadd = new JTextArea();
         resadd.setFont(new Font("Arial", Font.PLAIN, 15));
-        resadd.setSize(200, 75);
-        resadd.setLocation(580, 175);
+        resadd.setSize(300, 575);
+        resadd.setLocation(500, 175);
         resadd.setLineWrap(true);
         c.add(resadd);
 
@@ -280,10 +281,16 @@ class Frame extends JFrame implements ActionListener {
             if (WW.isSelected()) {
                 List result = countWW(listDemand);
                 System.out.println("MASHOKK WW");
+                StringBuilder str
+                        = new StringBuilder();
                 for (int v=0; v< result.size();v++){
+                    str.append(String.valueOf(result.get(v))+"\n");
                     System.out.println(result.get(v));
 
                 }
+                String dataWW = str.toString();
+                resadd.setText(dataWW);
+                resadd.setEditable(false);
 
             }
 
@@ -418,7 +425,7 @@ class Frame extends JFrame implements ActionListener {
         Collections.sort(listTotalCost);
         double totalCost = listTotalCost.get(0);
         for(int r=0; r< buyingMonth.size(); r++){
-            resultWW.add("Beli pada periode " +buyingMonth.get(r)+ " dengan jumlah demand " + totalDemand.get(r));
+            resultWW.add("Beli pada periode " +buyingMonth.get(r)+ " sejumlah " + totalDemand.get(r));
 
         }
         resultWW.add("Dengan Total Cost :" + totalCost);
