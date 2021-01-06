@@ -1,21 +1,21 @@
 package data;
 
 public class data {
-    public String Period;
+    public int Period;
     public int T;
     public double TotalSetup;
     public double SavingSum;
     public double SavingFee;
     public double Diff;
     public String Status;
-    public double AccumCost;
+    public double TotalCost;
     public double Quantity;
 
-    public String getPeriod() {
+    public int getPeriod() {
         return Period;
     }
 
-    public void setPeriod(String period) {
+    public void setPeriod(int period) {
         Period = period;
     }
 
@@ -67,12 +67,12 @@ public class data {
         Status = status;
     }
 
-    public double getAccumCost() {
-        return AccumCost;
+    public double getTotalCost() {
+        return TotalCost;
     }
 
-    public void setAccumCost(double accumCost) {
-        AccumCost = accumCost;
+    public void setTotalCost(double totalCost) {
+        TotalCost = totalCost;
     }
 
     public double getQuantity() {

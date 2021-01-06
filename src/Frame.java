@@ -280,7 +280,7 @@ class Frame extends JFrame implements ActionListener {
             // WW
             if (WW.isSelected()) {
                 List result = countWW(listDemand);
-                System.out.println("MASHOKK WW");
+                // System.out.println("MASHOKK WW");
                 StringBuilder str
                         = new StringBuilder();
                 for (int v=0; v< result.size();v++){
@@ -301,7 +301,16 @@ class Frame extends JFrame implements ActionListener {
 
             // SM Modif
             else if (SMmodif.isSelected()) { 
-                System.out.println("MASHOKK MODIF");
+                List result = countModif(listDemand);
+                StringBuilder str = new StringBuilder();
+                for (int v=0; v< result.size();v++){
+                    str.append(String.valueOf(result.get(v))+"\n");
+                    System.out.println(result.get(v));
+
+                }
+                String hasil = str.toString();
+                resadd.setText(hasil);
+                resadd.setEditable(false);
             }
             res.setText("Calculation success!");
 
@@ -438,73 +447,132 @@ class Frame extends JFrame implements ActionListener {
 
     }
 
-    private void countModif(int[] listDemand) {
-        StringBuilder result = new StringBuilder();
-        int period = Integer.parseInt(tperiod.getText());
-        double setup = Double.parseDouble(tsetup.getText());
-        double saving = Double.parseDouble(tsaving.getText());
+    private List countModif(int[] listDemand) {
 
-        // ini buat waktu gmn ya hm
+        List<String> resultModif = new ArrayList<>();
+        int period = Integer.parseInt(tperiod.getText()); // inputan aaaa
+        double setup = Double.parseDouble(tsetup.getText()); // a
+        double saving = Double.parseDouble(tsaving.getText()); // h
 
-        int stats = 0;
-        int skip = 0;
+        int thisPeriod = 1; // idx nya kurang 1
+        int count = 1; // ngitung t
+        int section = 0; // index awal section itu pada demand
+        int sumCounter = 1; // counter untuk sum
 
-        ArrayList<data> rest = new ArrayList<>();
+        ArrayList<data> listRow = new ArrayList<>();
+        
+        long startTime = System.nanoTime();
 
-        while(stats<period){
+        while(sumCounter<period+1){
             data temp = new data();
-            if (rest.size() < 1)
+            if (count==1)
             {
-                temp.setPeriod("1");
+                temp.setPeriod(thisPeriod);
                 temp.setT(1);
                 temp.setTotalSetup(setup);
                 temp.setSavingSum(0);
                 temp.setSavingFee(0);
                 temp.setDiff(setup);
                 temp.setStatus("Next");
-                temp.setAccumCost(0);
                 temp.setQuantity(listDemand[0]);
+                temp.setTotalCost(0);
+
+                count++;
+                thisPeriod++;
+                if (sumCounter==period){
+                    temp.setTotalCost(setup);
+                    sumCounter++;
+                }
             }
             else
             {
-                data restPart = rest.get(stats - 1);
-                int jj = stats + 1;
+                data restPart = listRow.get(thisPeriod-2);
+                int demand = listDemand[sumCounter];
 
-                //Ini masih salah ga ngerti
-                //demand.Skip(skip).Take(jj - skip).Sum() ini code c# nya
-
-                int param=0;
-                for(int x = skip; x<(jj-skip); x++)
+                int sum=0;
+                double sumTotal=0;
+                int a=0;
+                
+                for(int x = section; x<=sumCounter; x++)
                 {
-                    param+=listDemand[x];
+                    // System.out.println("ini yg di sum "+listDemand[x]);
+                    sum+=listDemand[x];
+                    sumTotal+=listDemand[x]*(a);
+                    a++;
                 }
-                double tempSavingSum = restPart.getSavingSum() + (restPart.getT() * listDemand[stats] * param);
 
-                double tempSavingFee = (saving * tempSavingSum) / param;
-                double tempDiff = setup - tempSavingFee;
-                String tempPeriod = restPart.getPeriod() + "," + String.valueOf(jj);
+                // System.out.println("ini sum nya datanya dibawah"+sum);
+                // System.out.println("ini section "+section);
+                // System.out.println("ini count "+sumCounter);
 
+                int tSebelum = restPart.getT();
+                double ssSebelum = restPart.getSavingSum();
+                // System.out.println("ini t sebelum "+tSebelum);
+                // System.out.println("ini ss sebelum "+ssSebelum);
+                // System.out.println("ini demand "+demand);
+                double ssNow = ssSebelum+(tSebelum*(demand*sum));
+                double ongkos =saving*ssNow/sum;
+                double selisih = Math.abs(setup-ongkos);
+                double totalCost= (sumTotal*saving)+setup;
 
-                //-------------ini bingun----------------//
-//                var tempStatus = Math.Abs(tempDiff) <= restPart.Diff ? "Next" : "Stop";
+                temp.setPeriod(thisPeriod);
+                temp.setT(count);
+                temp.setTotalSetup(setup);
+                temp.setSavingSum(ssNow);
+                temp.setSavingFee(ongkos);
+                temp.setDiff(selisih);
+                temp.setTotalCost(totalCost);
+                if (selisih <= restPart.getDiff()){
+                    temp.setStatus("Next");
+                    count++;
+                    thisPeriod++;
+                    sumCounter++;
+                    if (sumCounter==period){
+                        sumCounter++;
+                    }
 
+                }
+                else{
+                    temp.setStatus("Stop");
+                    count=1;
+                    section=sumCounter;
+                    thisPeriod++;
+                    sumCounter++;
 
-                double tempAccumCost = restPart.AccumCost + (listDemand[stats] * restPart.getT());
+                }
+            }
+            listRow.add(temp);
+            // System.out.println(temp.getPeriod());
+            // System.out.println(temp.getT());
+            // System.out.println(temp.getTotalSetup());
+            // System.out.println(temp.getSavingSum());
+            // System.out.println(temp.getSavingFee());
+            // System.out.println(temp.getDiff());
+            // System.out.println(temp.getTotalCost());
+            // System.out.println(temp.getStatus());
+        }
 
-
-                //-----------ini nge set tapi belum ku ubah
-//                temp.Period = restPart.Status.Equals("Print") ? jj.ToString() : tempPeriod;
-//                temp.T = restPart.Status.Equals("Print") ? 1 : (restPart.T + 1);
-//                temp.TotalSetup = setup;
-//                temp.SavingSum = restPart.Status.Equals("Print") ? 0 : tempSavingSum;
-//                temp.SavingFee = restPart.Status.Equals("Print") ? 0 : tempSavingFee;
-//                temp.Diff = restPart.Status.Equals("Print") ? setup : Math.Abs(tempDiff);
-//                temp.Status = restPart.Status.Equals("Print") ? "Next" : tempStatus;
-//                temp.AccumCost = restPart.Status.Equals("Print") ? 0 : tempAccumCost;
-//                temp.Quantity = restPart.Status.Equals("Print") ? demand[stats] : (restPart.Quantity + demand[stats]);
-
+        double total = 0;
+        for(int i = 0; i<listRow.size(); i++)
+        {
+            // System.out.println(listRow.get(i).getTotalCost());
+            if(listRow.get(i).getStatus()=="Stop"){
+                resultModif.add("Pemesanan ke-"+i+" = "+listRow.get(i-1).getTotalCost());
+                total+=listRow.get(i-1).getTotalCost();
             }
         }
+        total+=listRow.get(listRow.size()-1).getTotalCost();
+        resultModif.add("Pemesanan ke-"+(listRow.size()-1)+" = "+listRow.get(listRow.size()-1).getTotalCost());
+        resultModif.add("Total Cost = "+total);
+        long endTime = System.nanoTime();
+
+        // get difference of two nanoTime values
+        long timeElapsed = endTime - startTime;
+        resultModif.add("Execution time in nanoseconds  : " + timeElapsed);
+
+        resultModif.add("Execution time in milliseconds : " +
+                timeElapsed / 1000000);
+        return resultModif;
     }
 }
 
