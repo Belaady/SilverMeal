@@ -595,16 +595,18 @@ class Frame extends JFrame implements ActionListener {
         }
 
         double total = 0;
+        int j = 1;
         for(int i = 0; i<listRow.size(); i++)
         {
             // System.out.println(listRow.get(i).getTotalCost());
             if(listRow.get(i).getStatus()=="Stop"){
-                resultModif.add("Pemesanan ke-"+i+" = "+listRow.get(i-1).getTotalCost());
+                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getTotalCost());
+                j++;
                 total+=listRow.get(i-1).getTotalCost();
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
-        resultModif.add("Pemesanan ke-"+(listRow.size()-1)+" = "+listRow.get(listRow.size()-1).getTotalCost());
+        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getTotalCost());
         resultModif.add("Total Cost = "+total);
         long endTime = System.nanoTime();
 
