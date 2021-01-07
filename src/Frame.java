@@ -45,6 +45,10 @@ class Frame extends JFrame implements ActionListener {
     private JTextArea resModif;
     private JTextArea resOri;
     private JTextArea resadd;
+    private JTextArea compareCost;
+    private JTextArea compareTime;
+    private List allTotalCost;
+    private List allTime;
 
 
     public Frame()
@@ -194,6 +198,22 @@ class Frame extends JFrame implements ActionListener {
         tout.setEditable(false);
         c.add(tout);
 
+        compareCost = new JTextArea();
+        compareCost.setFont(new Font("Arial", Font.PLAIN, 15));
+        compareCost.setSize(200, 100);
+        compareCost.setLocation(675, 470);
+        compareCost.setLineWrap(true);
+        compareCost.setEditable(false);
+        c.add(compareCost);
+
+        compareTime= new JTextArea();
+        compareTime.setFont(new Font("Arial", Font.PLAIN, 15));
+        compareTime.setSize(200, 100);
+        compareTime.setLocation(900, 470);
+        compareTime.setLineWrap(true);
+        compareTime.setEditable(false);
+        c.add(compareTime);
+
         //Calculation success
         res = new JLabel("");
         res.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -296,6 +316,8 @@ class Frame extends JFrame implements ActionListener {
         //Buat print isi table dulu
         //BUAT CALCULATE
         else if (e.getSource() == calculate) {
+            allTotalCost = new ArrayList<Double>();
+            allTime = new ArrayList<Long>();
 
 //            ArrayList<Integer> listDemand = new ArrayList<>();
             int[] listDemand = new int[tableModel.getRowCount()];
@@ -318,7 +340,7 @@ class Frame extends JFrame implements ActionListener {
                 System.out.print(listDemand[r]);
 
             }
-            
+
 
                 List resultww = countWW(listDemand);
                 // System.out.println("MASHOKK WW");
@@ -332,6 +354,17 @@ class Frame extends JFrame implements ActionListener {
                 String dataWW = strWw.toString();
                 resadd.setText(dataWW);
                 resadd.setEditable(false);
+            
+                List resultModif = countModif(listDemand);
+            StringBuilder strModif = new StringBuilder();
+            for (int v=0; v< resultModif.size();v++){
+                strModif.append(String.valueOf(resultModif.get(v))+"\n");
+                System.out.println(resultModif.get(v));
+
+            }
+            String hasil = strModif.toString();
+            resModif.setText(hasil);
+            resModif.setEditable(false);
 
 
             // SM
@@ -340,18 +373,25 @@ class Frame extends JFrame implements ActionListener {
             // }
 
 
-                List resultModif = countModif(listDemand);
-                StringBuilder strModif = new StringBuilder();
-                for (int v=0; v< resultModif.size();v++){
-                    strModif.append(String.valueOf(resultModif.get(v))+"\n");
-                    System.out.println(resultModif.get(v));
 
-                }
-                String hasil = strModif.toString();
-                resModif.setText(hasil);
-                resModif.setEditable(false);
             
             res.setText("Calculation success!");
+            String dataCost
+                    = "Total Cost Terendah : \n"
+                    + "WW : " + allTotalCost.get(0)+ " \n"
+                    + "SM Modif : "
+                    + allTotalCost.get(1)+ "\n";
+                    compareCost.append(dataCost);
+            
+            String datatime
+                    = "Runtime Tercepat : \n"
+                    + "SM Modif : " + allTime.get(1)+ "s \n"
+                    + "WW : "
+                    + allTime.get(0)+ "s \n";
+            compareTime.append(datatime);
+                    
+            System.out.println(allTotalCost);
+            System.out.println(allTime);
 
         }
 
@@ -481,7 +521,8 @@ class Frame extends JFrame implements ActionListener {
 
         resultWW.add("Execution time in milliseconds : " +
                 timeElapsed / 1000000);
-
+                allTotalCost.add(totalCost);
+                allTime.add(timeElapsed/ 1000000);
         return resultWW;
 
     }
@@ -613,6 +654,8 @@ class Frame extends JFrame implements ActionListener {
 
         resultModif.add("Execution time in milliseconds : " +
                 timeElapsed / 1000000);
+                allTotalCost.add(total);
+                allTime.add(timeElapsed/ 1000000);
         return resultModif;
     }
 }
