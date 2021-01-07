@@ -545,6 +545,7 @@ class Frame extends JFrame implements ActionListener {
                 int sum=0;
                 double sumTotal=0;
                 int a=0;
+                int section = 0;
 
                 int tSebelum = restPart.getT();
                 double ssSebelum = restPart.getSavingSum();
@@ -565,6 +566,15 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingFee(ongkos);
                 temp.setDiff(TCUT);
                 temp.setTotalCost(totalCost);
+                
+                for(int x = section; x<=sumCounter; x++)
+                {
+                    // System.out.println("ini yg di sum "+listDemand[x]);
+                    sum+=listDemand[x];
+                    a++;
+                }
+                temp.setSum((int) Math.round(sum));
+
                 if (TCUT <= restPart.getDiff()){
                     temp.setStatus("Next");
                     count++;
@@ -580,6 +590,7 @@ class Frame extends JFrame implements ActionListener {
                     count=1;
                     thisPeriod++;
                     sumCounter++;
+                    section=sumCounter;
 
                 }
             }
@@ -600,13 +611,13 @@ class Frame extends JFrame implements ActionListener {
         {
             // System.out.println(listRow.get(i).getTotalCost());
             if(listRow.get(i).getStatus()=="Stop"){
-                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getTotalCost());
+                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getSum());
                 j++;
                 total+=listRow.get(i-1).getTotalCost();
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
-        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getTotalCost());
+        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getSum());
         resultModif.add("Total Cost = "+total);
         long endTime = System.nanoTime();
 
@@ -650,8 +661,9 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingFee(0);
                 temp.setDiff(setup);
                 temp.setStatus("Next");
-                temp.setQuantity(listDemand[0]);
+                temp.setQuantity(listDemand[section]);
                 temp.setTotalCost(0);
+                temp.setSum(listDemand[section]);
 
                 count++;
                 thisPeriod++;
@@ -698,6 +710,8 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingFee(ongkos);
                 temp.setDiff(selisih);
                 temp.setTotalCost(totalCost);
+                temp.setSum((int) Math.round(sum));
+
                 if (selisih <= restPart.getDiff()){
                     temp.setStatus("Next");
                     count++;
@@ -734,13 +748,13 @@ class Frame extends JFrame implements ActionListener {
         {
             // System.out.println(listRow.get(i).getTotalCost());
             if(listRow.get(i).getStatus()=="Stop"){
-                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getTotalCost());
+                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getSum());
                 j++;
                 total+=listRow.get(i-1).getTotalCost();
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
-        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getTotalCost());
+        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getSum());
         resultModif.add("Total Cost = "+total);
         long endTime = System.nanoTime();
 

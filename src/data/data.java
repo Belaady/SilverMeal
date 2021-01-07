@@ -3,6 +3,7 @@ package data;
 public class data {
     public int Period;
     public int T;
+    public int Sum;
     public double TotalSetup;
     public double SavingSum;
     public double SavingFee;
@@ -25,6 +26,14 @@ public class data {
 
     public void setT(int t) {
         T = t;
+    }
+
+    public double getSum() {
+        return Sum;
+    }
+
+    public void setSum(int sum) {
+        Sum = sum;
     }
 
     public double getTotalSetup() {
