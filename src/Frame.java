@@ -137,43 +137,43 @@ class Frame extends JFrame implements ActionListener {
         c.add(sp);
 
         // Calculation types
-        type = new JLabel("Type:"); 
-        type.setFont(new Font("Arial", Font.PLAIN, 16)); 
-        type.setSize(180, 20); 
-        type.setLocation(50, 500); 
-        c.add(type); 
+        // type = new JLabel("Type:"); 
+        // type.setFont(new Font("Arial", Font.PLAIN, 16)); 
+        // type.setSize(180, 20); 
+        // type.setLocation(50, 500); 
+        // c.add(type); 
   
-        WW = new JRadioButton("WW"); 
-        WW.setFont(new Font("Arial", Font.PLAIN, 15)); 
-        WW.setSelected(true); 
-        WW.setSize(75, 20); 
-        WW.setLocation(125, 500); 
-        c.add(WW); 
+        // WW = new JRadioButton("WW"); 
+        // WW.setFont(new Font("Arial", Font.PLAIN, 15)); 
+        // WW.setSelected(true); 
+        // WW.setSize(75, 20); 
+        // WW.setLocation(125, 500); 
+        // c.add(WW); 
   
-        SM = new JRadioButton("SM"); 
-        SM.setFont(new Font("Arial", Font.PLAIN, 15)); 
-        SM.setSelected(false); 
-        SM.setSize(80, 20); 
-        SM.setLocation(225, 500); 
-        c.add(SM); 
+        // SM = new JRadioButton("SM"); 
+        // SM.setFont(new Font("Arial", Font.PLAIN, 15)); 
+        // SM.setSelected(false); 
+        // SM.setSize(80, 20); 
+        // SM.setLocation(225, 500); 
+        // c.add(SM); 
 
-        SMmodif = new JRadioButton("SM modif"); 
-        SMmodif.setFont(new Font("Arial", Font.PLAIN, 15)); 
-        SMmodif.setSelected(false); 
-        SMmodif.setSize(100, 20); 
-        SMmodif.setLocation(320, 500); 
-        c.add(SMmodif); 
+        // SMmodif = new JRadioButton("SM modif"); 
+        // SMmodif.setFont(new Font("Arial", Font.PLAIN, 15)); 
+        // SMmodif.setSelected(false); 
+        // SMmodif.setSize(100, 20); 
+        // SMmodif.setLocation(320, 500); 
+        // c.add(SMmodif); 
 
-        group = new ButtonGroup(); 
-        group.add(WW); 
-        group.add(SM);
-        group.add(SMmodif);
+        // group = new ButtonGroup(); 
+        // group.add(WW); 
+        // group.add(SM);
+        // group.add(SMmodif);
 
         //Button Reset
         reset = new JButton("Reset");
         reset.setFont(new Font("Arial", Font.PLAIN, 15));
         reset.setSize(100, 20);
-        reset.setLocation(100, 550);
+        reset.setLocation(100, 500);
         reset.addActionListener(this);
         c.add(reset);
 
@@ -181,7 +181,7 @@ class Frame extends JFrame implements ActionListener {
         calculate = new JButton("Calculate");
         calculate.setFont(new Font("Arial", Font.PLAIN, 15));
         calculate.setSize(100, 20);
-        calculate.setLocation(250, 550);
+        calculate.setLocation(250, 500);
         calculate.addActionListener(this);
         c.add(calculate);
 
@@ -231,7 +231,7 @@ class Frame extends JFrame implements ActionListener {
         c.add(resModif);
 
         //Label Modif
-        ww = new JLabel("SM Modif Result :");
+        ww = new JLabel("WW Result :");
         ww.setFont(new Font("Arial", Font.PLAIN, 16));
         ww.setSize(200, 20);
         ww.setLocation(1050, 75);
@@ -319,41 +319,38 @@ class Frame extends JFrame implements ActionListener {
 
             }
             
-            // WW
-            if (WW.isSelected()) {
-                List result = countWW(listDemand);
+
+                List resultww = countWW(listDemand);
                 // System.out.println("MASHOKK WW");
-                StringBuilder str
+                StringBuilder strWw
                         = new StringBuilder();
-                for (int v=0; v< result.size();v++){
-                    str.append(String.valueOf(result.get(v))+"\n");
-                    System.out.println(result.get(v));
+                for (int v=0; v< resultww.size();v++){
+                    strWw.append(String.valueOf(resultww.get(v))+"\n");
+                    System.out.println(resultww.get(v));
 
                 }
-                String dataWW = str.toString();
+                String dataWW = strWw.toString();
                 resadd.setText(dataWW);
                 resadd.setEditable(false);
 
-            }
 
             // SM
-            else if (SM.isSelected()) { 
-                System.out.println("MASHOKK SM");
-            }
+            // else if (SM.isSelected()) { 
+            //     System.out.println("MASHOKK SM");
+            // }
 
-            // SM Modif
-            else if (SMmodif.isSelected()) { 
-                List result = countModif(listDemand);
-                StringBuilder str = new StringBuilder();
-                for (int v=0; v< result.size();v++){
-                    str.append(String.valueOf(result.get(v))+"\n");
-                    System.out.println(result.get(v));
+
+                List resultModif = countModif(listDemand);
+                StringBuilder strModif = new StringBuilder();
+                for (int v=0; v< resultModif.size();v++){
+                    strModif.append(String.valueOf(resultModif.get(v))+"\n");
+                    System.out.println(resultModif.get(v));
 
                 }
-                String hasil = str.toString();
-                resadd.setText(hasil);
-                resadd.setEditable(false);
-            }
+                String hasil = strModif.toString();
+                resModif.setText(hasil);
+                resModif.setEditable(false);
+            
             res.setText("Calculation success!");
 
         }
