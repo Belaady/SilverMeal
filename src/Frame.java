@@ -127,7 +127,7 @@ class Frame extends JFrame implements ActionListener {
         JScrollPane sp = new JScrollPane(table);
         sp.setFont(new Font("Arial", Font.PLAIN, 20));
         sp.setSize(400, 175);
-        sp.setLocation(30,300);
+        sp.setLocation(20,300);
         c.add(sp);
 
         //Button Reset
@@ -360,10 +360,10 @@ class Frame extends JFrame implements ActionListener {
             
             String datatime                                             //Get string data time
                     = "Runtime Tercepat : \n"
-                    + "SM Modif : " + allTime.get(2)+ "s \n"
-                    + "SM Ori : " + allTime.get(1)+ "s \n"
+                    + "SM Modif : " + allTime.get(2)+ "ms \n"
+                    + "SM Ori : " + allTime.get(1)+ "ms \n"
                     + "WW : "
-                    + allTime.get(0)+ "s \n";
+                    + allTime.get(0)+ "ms \n";
             compareTime.append(datatime);                               
                     
             System.out.println(allTotalCost);                           //Check All Total Cost in Terminal
@@ -461,6 +461,9 @@ class Frame extends JFrame implements ActionListener {
                 value = period+1;
 
             }
+            for(int b= buyingMonth.get(col)-1; b<value-1; b++){
+                jumlah+= listDemand[b];
+            }
             totalDemand.add(jumlah);
 
         }
@@ -511,6 +514,7 @@ class Frame extends JFrame implements ActionListener {
         int thisPeriod = 1; // idx nya kurang 1
         int count = 1; // ngitung t
         int sumCounter = 1; // counter untuk sum
+        int section = 0;
 
         ArrayList<data> listRow = new ArrayList<>();
         
@@ -520,7 +524,7 @@ class Frame extends JFrame implements ActionListener {
             data temp = new data();
             if (count==1)
             {
-                temp.setPeriod(thisPeriod);
+                temp.setPeriod(section+1);
                 temp.setT(1);
                 temp.setTotalSetup(setup);
                 temp.setSavingSum(0);
@@ -545,7 +549,6 @@ class Frame extends JFrame implements ActionListener {
                 int sum=0;
                 double sumTotal=0;
                 int a=0;
-                int section = 0;
 
                 int tSebelum = restPart.getT();
                 double ssSebelum = restPart.getSavingSum();
@@ -559,13 +562,13 @@ class Frame extends JFrame implements ActionListener {
                 double totalCost= setup+ongkos;
                 double TCUT = totalCost/count;
 
-                temp.setPeriod(thisPeriod);
+                temp.setPeriod(section+1);
                 temp.setT(count);
                 temp.setTotalSetup(setup);
                 temp.setSavingSum(ssNow);
                 temp.setSavingFee(ongkos);
                 temp.setDiff(TCUT);
-                temp.setTotalCost(totalCost);
+                temp.setTotalCost(Math.round(totalCost  * 100.0) / 100.0);
                 
                 for(int x = section; x<=sumCounter; x++)
                 {
@@ -611,13 +614,13 @@ class Frame extends JFrame implements ActionListener {
         {
             // System.out.println(listRow.get(i).getTotalCost());
             if(listRow.get(i).getStatus()=="Stop"){
-                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getSum());
+                resultModif.add("Beli pada periode "+listRow.get(i-1).getPeriod()+" sejumlah "+listRow.get(i-1).getSum());
                 j++;
                 total+=listRow.get(i-1).getTotalCost();
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
-        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getSum());
+        resultModif.add("Beli pada periode "+listRow.get(listRow.size()-1).getPeriod()+" sejumlah "+listRow.get(listRow.size()-1).getSum());
         resultModif.add("Total Cost = "+total);
         long endTime = System.nanoTime();
 
@@ -654,7 +657,7 @@ class Frame extends JFrame implements ActionListener {
             data temp = new data();
             if (count==1)
             {
-                temp.setPeriod(thisPeriod);
+                temp.setPeriod(section+1);
                 temp.setT(1);
                 temp.setTotalSetup(setup);
                 temp.setSavingSum(0);
@@ -703,13 +706,13 @@ class Frame extends JFrame implements ActionListener {
                 double selisih = Math.abs(setup-ongkos);
                 double totalCost= (sumTotal*saving)+setup;
 
-                temp.setPeriod(thisPeriod);
+                temp.setPeriod(section+1);
                 temp.setT(count);
                 temp.setTotalSetup(setup);
                 temp.setSavingSum(ssNow);
                 temp.setSavingFee(ongkos);
                 temp.setDiff(selisih);
-                temp.setTotalCost(totalCost);
+                temp.setTotalCost(Math.round(totalCost  * 100.0) / 100.0);
                 temp.setSum((int) Math.round(sum));
 
                 if (selisih <= restPart.getDiff()){
@@ -748,17 +751,17 @@ class Frame extends JFrame implements ActionListener {
         {
             // System.out.println(listRow.get(i).getTotalCost());
             if(listRow.get(i).getStatus()=="Stop"){
-                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getSum());
+                resultModif.add("Beli pada periode "+listRow.get(i-1).getPeriod()+" sejumlah "+listRow.get(i-1).getSum());
                 j++;
                 total+=listRow.get(i-1).getTotalCost();
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
-        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getSum());
+        resultModif.add("Beli pada periode "+listRow.get(listRow.size()-1).getPeriod()+" sejumlah "+listRow.get(listRow.size()-1).getSum());
         resultModif.add("Total Cost = "+total);
         long endTime = System.nanoTime();
 
-        // get difference of two nanoTime values
+        //get difference of two nanoTime values
         long timeElapsed = endTime - startTime;
         resultModif.add("Execution time in nanoseconds  : " + timeElapsed);
 
