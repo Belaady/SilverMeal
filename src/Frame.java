@@ -39,13 +39,18 @@ class Frame extends JFrame implements ActionListener {
     private JButton calculate;
     private JTextArea tout;
     private JLabel res;
+    private JLabel ww;
+    private JLabel ori;
+    private JLabel modif;
+    private JTextArea resModif;
+    private JTextArea resOri;
     private JTextArea resadd;
 
 
     public Frame()
     {
         setTitle("Silver-Meal Trial");
-        setBounds(300, 90, 900, 650);
+        setBounds(300, 90, 1350, 650);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -183,8 +188,8 @@ class Frame extends JFrame implements ActionListener {
         // Output print
         tout = new JTextArea();
         tout.setFont(new Font("Arial", Font.PLAIN, 15));
-        tout.setSize(300, 400);
-        tout.setLocation(500, 100);
+        tout.setSize(200, 100);
+        tout.setLocation(450, 470);
         tout.setLineWrap(true);
         tout.setEditable(false);
         c.add(tout);
@@ -196,12 +201,49 @@ class Frame extends JFrame implements ActionListener {
         res.setLocation(150, 580);
         c.add(res);
 
+
+        //Label ori
+        ori = new JLabel("SM Ori Result :");
+        ori.setFont(new Font("Arial", Font.PLAIN, 16));
+        ori.setSize(200, 20);
+        ori.setLocation(450, 75);
+        c.add(ori);
+
+        resOri = new JTextArea();
+        resOri.setFont(new Font("Arial", Font.PLAIN, 13));
+        resOri.setSize(290, 350);
+        resOri.setLocation(450, 100);
+        resOri.setLineWrap(true);
+        c.add(resOri);
+
+        //Label Modif
+        modif = new JLabel("SM Modif Result :");
+        modif.setFont(new Font("Arial", Font.PLAIN, 16));
+        modif.setSize(200, 20);
+        modif.setLocation(750, 75);
+        c.add(modif);
+
+        resModif = new JTextArea();
+        resModif.setFont(new Font("Arial", Font.PLAIN, 13));
+        resModif.setSize(290, 350);
+        resModif.setLocation(750, 100);
+        resModif.setLineWrap(true);
+        c.add(resModif);
+
+        //Label Modif
+        ww = new JLabel("SM Modif Result :");
+        ww.setFont(new Font("Arial", Font.PLAIN, 16));
+        ww.setSize(200, 20);
+        ww.setLocation(1050, 75);
+        c.add(ww);
+
         resadd = new JTextArea();
-        resadd.setFont(new Font("Arial", Font.PLAIN, 15));
-        resadd.setSize(300, 575);
-        resadd.setLocation(500, 175);
+        resadd.setFont(new Font("Arial", Font.PLAIN, 13));
+        resadd.setSize(290, 350);
+        resadd.setLocation(1050, 100);
         resadd.setLineWrap(true);
         c.add(resadd);
+
 
         setVisible(true);
     }
