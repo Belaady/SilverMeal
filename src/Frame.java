@@ -3,11 +3,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-//import javax.xml.crypto.Data;
-//import java.time.Duration;
-//import java.time.Instant;
-//import java.util.concurrent.TimeUnit;
-//import static java.time.temporal.ChronoUnit.SECONDS;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.awt.*;
@@ -28,11 +23,6 @@ class Frame extends JFrame implements ActionListener {
     private JTextField tsetup;
     private JLabel saving;
     private JTextField tsaving;
-    private JLabel type; 
-    private JRadioButton WW; 
-    private JRadioButton SM; 
-    private JRadioButton SMmodif; 
-    private ButtonGroup group; 
     private JButton sub;
     private JButton reset;
     private DefaultTableModel tableModel;
@@ -140,39 +130,6 @@ class Frame extends JFrame implements ActionListener {
         sp.setLocation(30,300);
         c.add(sp);
 
-        // Calculation types
-        // type = new JLabel("Type:"); 
-        // type.setFont(new Font("Arial", Font.PLAIN, 16)); 
-        // type.setSize(180, 20); 
-        // type.setLocation(50, 500); 
-        // c.add(type); 
-  
-        // WW = new JRadioButton("WW"); 
-        // WW.setFont(new Font("Arial", Font.PLAIN, 15)); 
-        // WW.setSelected(true); 
-        // WW.setSize(75, 20); 
-        // WW.setLocation(125, 500); 
-        // c.add(WW); 
-  
-        // SM = new JRadioButton("SM"); 
-        // SM.setFont(new Font("Arial", Font.PLAIN, 15)); 
-        // SM.setSelected(false); 
-        // SM.setSize(80, 20); 
-        // SM.setLocation(225, 500); 
-        // c.add(SM); 
-
-        // SMmodif = new JRadioButton("SM modif"); 
-        // SMmodif.setFont(new Font("Arial", Font.PLAIN, 15)); 
-        // SMmodif.setSelected(false); 
-        // SMmodif.setSize(100, 20); 
-        // SMmodif.setLocation(320, 500); 
-        // c.add(SMmodif); 
-
-        // group = new ButtonGroup(); 
-        // group.add(WW); 
-        // group.add(SM);
-        // group.add(SMmodif);
-
         //Button Reset
         reset = new JButton("Reset");
         reset.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -198,6 +155,7 @@ class Frame extends JFrame implements ActionListener {
         tout.setEditable(false);
         c.add(tout);
 
+        //Output Compare Cost
         compareCost = new JTextArea();
         compareCost.setFont(new Font("Arial", Font.PLAIN, 15));
         compareCost.setSize(200, 100);
@@ -206,6 +164,7 @@ class Frame extends JFrame implements ActionListener {
         compareCost.setEditable(false);
         c.add(compareCost);
 
+        //Output Compare Time
         compareTime= new JTextArea();
         compareTime.setFont(new Font("Arial", Font.PLAIN, 15));
         compareTime.setSize(200, 100);
@@ -229,10 +188,11 @@ class Frame extends JFrame implements ActionListener {
         ori.setLocation(450, 75);
         c.add(ori);
 
+        //Text Area SM Ori
         resSM = new JTextArea();
         resSM.setFont(new Font("Arial", Font.PLAIN, 13));
-        resSM.setSize(290, 350);
-        resSM.setLocation(450, 100);
+        resSM.setSize(280, 350);
+        resSM.setLocation(440, 100);
         resSM.setLineWrap(true);
         c.add(resSM);
 
@@ -243,24 +203,26 @@ class Frame extends JFrame implements ActionListener {
         modif.setLocation(750, 75);
         c.add(modif);
 
+        //Text Area SM Modif
         resModif = new JTextArea();
         resModif.setFont(new Font("Arial", Font.PLAIN, 13));
-        resModif.setSize(290, 350);
-        resModif.setLocation(750, 100);
+        resModif.setSize(280, 350);
+        resModif.setLocation(740, 100);
         resModif.setLineWrap(true);
         c.add(resModif);
 
-        //Label Modif
+        //Label WW
         ww = new JLabel("WW Result :");
         ww.setFont(new Font("Arial", Font.PLAIN, 16));
         ww.setSize(200, 20);
         ww.setLocation(1050, 75);
         c.add(ww);
 
+        //Text Area SM WW
         resWW = new JTextArea();
         resWW.setFont(new Font("Arial", Font.PLAIN, 13));
-        resWW.setSize(290, 350);
-        resWW.setLocation(1050, 100);
+        resWW.setSize(280, 350);
+        resWW.setLocation(1040, 100);
         resWW.setLineWrap(true);
         c.add(resWW);
 
@@ -272,13 +234,18 @@ class Frame extends JFrame implements ActionListener {
     // to get the action performed
     // by the user and act accordingly
     public void actionPerformed(ActionEvent e) {
+
+        //If Button Submit Pressed
         if (e.getSource() == sub) {
+
+            //Clear Existing Row
             if(tableModel.getRowCount()!=0){
                 for (int x = tableModel.getRowCount() - 1; x > -1; x--) {
                     tableModel.removeRow(x);
                 }
             }
-            String data
+
+            String data                                                     //Get String Input Data
                     = "Period : "
                     + tperiod.getText() + "\n"
                     + "Setup Cost : "
@@ -292,10 +259,12 @@ class Frame extends JFrame implements ActionListener {
                 tableModel.addRow(new Object[] { i+1});
             }
 
+            //Display Input Data
             tout.setText(data);
             tout.setEditable(false);
         }
 
+        //If Button Reset Pressed
         else if (e.getSource() == reset) {
             String def = "";
             tperiod.setText(def);
@@ -308,123 +277,124 @@ class Frame extends JFrame implements ActionListener {
             resWW.setText(def);
             compareCost.setText(def);
             compareTime.setText(def);
+
+            //Remove existing row
             for (int r = tableModel.getRowCount() - 1; r > -1; r--) {
                 tableModel.removeRow(r);
             }
-            WW.setSelected(true);
-            SM.setSelected(false);
-            SMmodif.setSelected(false);
         }
 
-
-        //Buat print isi table dulu
-        //BUAT CALCULATE
+        //If Button Calculate pressed
         else if (e.getSource() == calculate) {
+
+            //Clear Existing Output
+            String def = "";
+            res.setText(def);
+            resModif.setText(def);
+            resSM.setText(def);
+            resWW.setText(def);
+            compareCost.setText(def);
+            compareTime.setText(def);
             allTotalCost = new ArrayList<Double>();
             allTime = new ArrayList<Long>();
 
-//            ArrayList<Integer> listDemand = new ArrayList<>();
             int[] listDemand = new int[tableModel.getRowCount()];
 
             //Get demand
             for(int i =0; i<tableModel.getRowCount(); i++){
-//                listDemand.add(Integer.parseInt(tableModel.getValueAt(i,1).toString()));
-                listDemand[i] = Integer.parseInt(tableModel.getValueAt(i,1).toString()); // masih salah di sini
+                listDemand[i] = Integer.parseInt(tableModel.getValueAt(i,1).toString()); 
             }
 
-            //Cek isi table
+            //Get table data and input
             Vector dataTable =  tableModel.getDataVector();
-//            System.out.println(dataTable);
-
-            //Print Demand
             double setup = Double.parseDouble(tsetup.getText());
             double saving = Double.parseDouble(tsaving.getText());
-            for
-            (int r=0; r< listDemand.length; r++){
-                System.out.print(listDemand[r]);
 
-            }
 
-            List resultww = countWW(listDemand);
-            // System.out.println("MASHOKK WW");
-            StringBuilder strWw
-                    = new StringBuilder();
+
+            List resultww = countWW(listDemand);                //DO count WW
+            StringBuilder strWw = new StringBuilder();
             for (int v=0; v< resultww.size();v++){
                 strWw.append(String.valueOf(resultww.get(v))+"\n");
-                System.out.println(resultww.get(v));
+                
+                System.out.println(resultww.get(v));         //Check data ww
 
             }
+
             String dataWW = strWw.toString();
-            resWW.setText(dataWW);
+            resWW.setText(dataWW);                          //Display data WW
             resWW.setEditable(false);
 
-            List resultSM = countSM(listDemand);
+            List resultSM = countSM(listDemand);                //DO Count SM Ori
             StringBuilder strSM = new StringBuilder();
+
             for (int v=0; v< resultSM.size();v++){
-                strSM.append(String.valueOf(resultSM.get(v))+"\n");
+                strSM.append(String.valueOf(resultSM.get(v))+"\n");     //Check data SM Ori
                 System.out.println(resultSM.get(v));
             }
 
             String hasil = strSM.toString();
-            resSM.setText(hasil);
+            resSM.setText(hasil);                                //Display data WW
             resSM.setEditable(false);
         
-            List resultModif = countModif(listDemand);
+
+            List resultModif = countModif(listDemand);                  //DO Count SM Modif
             StringBuilder strModif = new StringBuilder();
             for (int v=0; v< resultModif.size();v++){
-                strModif.append(String.valueOf(resultModif.get(v))+"\n");
-                System.out.println(resultModif.get(v));
+                strModif.append(String.valueOf(resultModif.get(v))+"\n");       
+                System.out.println(resultModif.get(v));                 //Check data SM Modif
             }
 
             String hasil2 = strModif.toString();
-            resModif.setText(hasil2);
+            resModif.setText(hasil2);                                   //Display data SM Modif
             resModif.setEditable(false);
 
-            res.setText("Calculation success!");
-            String dataCost
+            String dataCost                                             //Get string data cost
                     = "Total Cost Terendah : \n"
                     + "WW : " + allTotalCost.get(0)+ " \n"
                     + "SM Modif : "
                     + allTotalCost.get(2)+ "\n"
                     + "SM Ori : "
                     + allTotalCost.get(1)+ "\n";
-                    compareCost.append(dataCost);
+            compareCost.append(dataCost);
             
-            String datatime
+            String datatime                                             //Get string data time
                     = "Runtime Tercepat : \n"
                     + "SM Modif : " + allTime.get(2)+ "s \n"
                     + "SM Ori : " + allTime.get(1)+ "s \n"
                     + "WW : "
                     + allTime.get(0)+ "s \n";
-            compareTime.append(datatime);
+            compareTime.append(datatime);                               
                     
-            System.out.println(allTotalCost);
-            System.out.println(allTime);
+            System.out.println(allTotalCost);                           //Check All Total Cost in Terminal
+            System.out.println(allTime);                                //Check All Time in Terminal
+
+            res.setText("Calculation success!");                        //Label Calculation done and success
 
         }
 
     }
 
+    //Calculation for Wagner-Within
     private List countWW(int[] listDemand) {
+
         //Initiate component
         List<List<Double>> myList = new ArrayList<List<Double>>();
         int period = Integer.parseInt(tperiod.getText());
         double setup = Double.parseDouble(tsetup.getText());
         double saving = Double.parseDouble(tsaving.getText());
         List<String> resultWW = new ArrayList<>();
-
         List<Double> minToBuy = new ArrayList<>();
         List<Integer> buyingMonth = new ArrayList<Integer>();
         List<Integer> totalDemand = new ArrayList<Integer>();
-
         long startTime = System.nanoTime();
 
-        //Start list awal
+        //Start First Row
         List<Double> start = new ArrayList<>();
         start.add(setup);
         myList.add(start);
 
-        //For first row
+        //For First Row
         for (int y = 1; y < period; y++) {
             List<Double> afbefore = new ArrayList<>(myList.get(y - 1));
             List<Double> nextMonth = new ArrayList<>();
@@ -446,39 +416,39 @@ class Frame extends JFrame implements ActionListener {
             }
         }
 
-        //Checking all array
+        //Checking all array in Terminal
         System.out.println(myList);
 
-        //Check when to buy
+        //Check When To Buy
         for(int month =period-1; month>-1; month--){
             List<Double> findMin = new ArrayList<>(myList.get(month));
             Collections.sort(findMin);
             double minValue = findMin.get(0);
 
             int indexValue = myList.get(month).indexOf(minValue);
-            int via = month+1;
-            if(indexValue==month){
+            int actualMonth = month+1;
 
-//                System.out.println("Beli pada bulan ke-"+via+" dengan harga "+minValue);
-                buyingMonth.add(via);
+            if(indexValue==month){
+                buyingMonth.add(actualMonth);
                 minToBuy.add(minValue);
             }
             else {
-
-                int bela = indexValue+1;
+                int resMonth = indexValue+1;
                 List<Double> jumpColumn = new ArrayList<>(myList.get(indexValue));
                 Collections.sort(jumpColumn);
                 double minJump = jumpColumn.get(0);
-
-//                System.out.println(" Masuk loop Beli pada bulan ke-"+bela+" dengan harga "+ minJump);
                 minToBuy.add(minJump);
-                buyingMonth.add(bela);
+                buyingMonth.add(resMonth);
                 month=indexValue;
 
             }
         }
+
+        //reverse to first
         Collections.reverse(buyingMonth);
         Collections.reverse(minToBuy);
+
+        //Get demand every purchase
         for(int col=0; col<buyingMonth.size(); col++){
             int jumlah =0;
             int param =0;
@@ -491,19 +461,11 @@ class Frame extends JFrame implements ActionListener {
                 value = period+1;
 
             }
-
-//            System.out.println("Ini value " + value);
-//            System.out.println("Ini col " + col);
-
-            for(int b= buyingMonth.get(col)-1; b<value-1; b++){
-                jumlah+= listDemand[b];
-//                System.out.println(listDemand[b]);
-//                System.out.println("ini col"+ b +" Ini jumlah " + jumlah);
-            }
             totalDemand.add(jumlah);
 
         }
 
+        //Check output in Terminal
         System.out.println( "ini minimal harga pembelian " + minToBuy);
         System.out.println("Ini bulan pembelian " + buyingMonth);
         System.out.println("Total demand tiap pembelian " + totalDemand);
@@ -516,6 +478,8 @@ class Frame extends JFrame implements ActionListener {
         }
         resultWW.add("Dengan Total Cost :" + totalCost);
 
+
+        //Stop counting Time
         long endTime = System.nanoTime();
 
         // get difference of two nanoTime values
@@ -526,8 +490,8 @@ class Frame extends JFrame implements ActionListener {
                 allTotalCost.add(totalCost);
                 allTime.add(timeElapsed/ 1000000);
         
+        //Check RunTime in Terminal
         System.out.println("Execution time in nanoseconds  : " + timeElapsed);
-
         System.out.println("Execution time in milliseconds : " +
                 timeElapsed / 1000000);
 
@@ -535,9 +499,12 @@ class Frame extends JFrame implements ActionListener {
 
     }
 
+
+
+    //Calculation for SM ORI
     private List countSM(int[] listDemand) {
         List<String> resultModif = new ArrayList<>();
-        int period = Integer.parseInt(tperiod.getText()); // inputan aaaa
+        int period = Integer.parseInt(tperiod.getText()); // input period
         double setup = Double.parseDouble(tsetup.getText()); // a
         double saving = Double.parseDouble(tsaving.getText()); // h
 
@@ -655,8 +622,9 @@ class Frame extends JFrame implements ActionListener {
     
     }
 
-    private List countModif(int[] listDemand) {
 
+    //Calculation for SM Modif
+    private List countModif(int[] listDemand) {
         List<String> resultModif = new ArrayList<>();
         int period = Integer.parseInt(tperiod.getText()); // inputan aaaa
         double setup = Double.parseDouble(tsetup.getText()); // a
