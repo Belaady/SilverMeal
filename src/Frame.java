@@ -43,8 +43,8 @@ class Frame extends JFrame implements ActionListener {
     private JLabel ori;
     private JLabel modif;
     private JTextArea resModif;
-    private JTextArea resOri;
-    private JTextArea resadd;
+    private JTextArea resSM;
+    private JTextArea resWW;
     private JTextArea compareCost;
     private JTextArea compareTime;
     private List allTotalCost;
@@ -229,12 +229,12 @@ class Frame extends JFrame implements ActionListener {
         ori.setLocation(450, 75);
         c.add(ori);
 
-        resOri = new JTextArea();
-        resOri.setFont(new Font("Arial", Font.PLAIN, 13));
-        resOri.setSize(290, 350);
-        resOri.setLocation(450, 100);
-        resOri.setLineWrap(true);
-        c.add(resOri);
+        resSM = new JTextArea();
+        resSM.setFont(new Font("Arial", Font.PLAIN, 13));
+        resSM.setSize(290, 350);
+        resSM.setLocation(450, 100);
+        resSM.setLineWrap(true);
+        c.add(resSM);
 
         //Label Modif
         modif = new JLabel("SM Modif Result :");
@@ -257,12 +257,12 @@ class Frame extends JFrame implements ActionListener {
         ww.setLocation(1050, 75);
         c.add(ww);
 
-        resadd = new JTextArea();
-        resadd.setFont(new Font("Arial", Font.PLAIN, 13));
-        resadd.setSize(290, 350);
-        resadd.setLocation(1050, 100);
-        resadd.setLineWrap(true);
-        c.add(resadd);
+        resWW = new JTextArea();
+        resWW.setFont(new Font("Arial", Font.PLAIN, 13));
+        resWW.setSize(290, 350);
+        resWW.setLocation(1050, 100);
+        resWW.setLineWrap(true);
+        c.add(resWW);
 
 
         setVisible(true);
@@ -303,7 +303,11 @@ class Frame extends JFrame implements ActionListener {
             tsaving.setText(def);
             res.setText(def);
             tout.setText(def);
-            resadd.setText(def);
+            resModif.setText(def);
+            resSM.setText(def);
+            resWW.setText(def);
+            compareCost.setText(def);
+            compareTime.setText(def);
             for (int r = tableModel.getRowCount() - 1; r > -1; r--) {
                 tableModel.removeRow(r);
             }
@@ -341,51 +345,55 @@ class Frame extends JFrame implements ActionListener {
 
             }
 
+            List resultww = countWW(listDemand);
+            // System.out.println("MASHOKK WW");
+            StringBuilder strWw
+                    = new StringBuilder();
+            for (int v=0; v< resultww.size();v++){
+                strWw.append(String.valueOf(resultww.get(v))+"\n");
+                System.out.println(resultww.get(v));
 
-                List resultww = countWW(listDemand);
-                // System.out.println("MASHOKK WW");
-                StringBuilder strWw
-                        = new StringBuilder();
-                for (int v=0; v< resultww.size();v++){
-                    strWw.append(String.valueOf(resultww.get(v))+"\n");
-                    System.out.println(resultww.get(v));
+            }
+            String dataWW = strWw.toString();
+            resWW.setText(dataWW);
+            resWW.setEditable(false);
 
-                }
-                String dataWW = strWw.toString();
-                resadd.setText(dataWW);
-                resadd.setEditable(false);
-            
-                List resultModif = countModif(listDemand);
+            List resultSM = countSM(listDemand);
+            StringBuilder strSM = new StringBuilder();
+            for (int v=0; v< resultSM.size();v++){
+                strSM.append(String.valueOf(resultSM.get(v))+"\n");
+                System.out.println(resultSM.get(v));
+            }
+
+            String hasil = strSM.toString();
+            resSM.setText(hasil);
+            resSM.setEditable(false);
+        
+            List resultModif = countModif(listDemand);
             StringBuilder strModif = new StringBuilder();
             for (int v=0; v< resultModif.size();v++){
                 strModif.append(String.valueOf(resultModif.get(v))+"\n");
                 System.out.println(resultModif.get(v));
-
             }
-            String hasil = strModif.toString();
-            resModif.setText(hasil);
+
+            String hasil2 = strModif.toString();
+            resModif.setText(hasil2);
             resModif.setEditable(false);
 
-
-            // SM
-            // else if (SM.isSelected()) { 
-            //     System.out.println("MASHOKK SM");
-            // }
-
-
-
-            
             res.setText("Calculation success!");
             String dataCost
                     = "Total Cost Terendah : \n"
                     + "WW : " + allTotalCost.get(0)+ " \n"
                     + "SM Modif : "
+                    + allTotalCost.get(2)+ "\n"
+                    + "SM Ori : "
                     + allTotalCost.get(1)+ "\n";
                     compareCost.append(dataCost);
             
             String datatime
                     = "Runtime Tercepat : \n"
-                    + "SM Modif : " + allTime.get(1)+ "s \n"
+                    + "SM Modif : " + allTime.get(2)+ "s \n"
+                    + "SM Ori : " + allTime.get(1)+ "s \n"
                     + "WW : "
                     + allTime.get(0)+ "s \n";
             compareTime.append(datatime);
@@ -496,16 +504,6 @@ class Frame extends JFrame implements ActionListener {
 
         }
 
-        long endTime = System.nanoTime();
-
-        // get difference of two nanoTime values
-        long timeElapsed = endTime - startTime;
-
-        System.out.println("Execution time in nanoseconds  : " + timeElapsed);
-
-        System.out.println("Execution time in milliseconds : " +
-                timeElapsed / 1000000);
-
         System.out.println( "ini minimal harga pembelian " + minToBuy);
         System.out.println("Ini bulan pembelian " + buyingMonth);
         System.out.println("Total demand tiap pembelian " + totalDemand);
@@ -517,14 +515,144 @@ class Frame extends JFrame implements ActionListener {
 
         }
         resultWW.add("Dengan Total Cost :" + totalCost);
-        resultWW.add("Execution time in nanoseconds  : " + timeElapsed);
 
+        long endTime = System.nanoTime();
+
+        // get difference of two nanoTime values
+        long timeElapsed = endTime - startTime;
+        resultWW.add("Execution time in nanoseconds  : " + timeElapsed);
         resultWW.add("Execution time in milliseconds : " +
                 timeElapsed / 1000000);
                 allTotalCost.add(totalCost);
                 allTime.add(timeElapsed/ 1000000);
+        
+        System.out.println("Execution time in nanoseconds  : " + timeElapsed);
+
+        System.out.println("Execution time in milliseconds : " +
+                timeElapsed / 1000000);
+
         return resultWW;
 
+    }
+
+    private List countSM(int[] listDemand) {
+        List<String> resultModif = new ArrayList<>();
+        int period = Integer.parseInt(tperiod.getText()); // inputan aaaa
+        double setup = Double.parseDouble(tsetup.getText()); // a
+        double saving = Double.parseDouble(tsaving.getText()); // h
+
+        int thisPeriod = 1; // idx nya kurang 1
+        int count = 1; // ngitung t
+        int sumCounter = 1; // counter untuk sum
+
+        ArrayList<data> listRow = new ArrayList<>();
+        
+        long startTime = System.nanoTime();
+
+        while(sumCounter<period+1){
+            data temp = new data();
+            if (count==1)
+            {
+                temp.setPeriod(thisPeriod);
+                temp.setT(1);
+                temp.setTotalSetup(setup);
+                temp.setSavingSum(0);
+                temp.setSavingFee(0);
+                temp.setDiff(setup);
+                temp.setStatus("Next");
+                temp.setQuantity(listDemand[0]);
+                temp.setTotalCost(0);
+
+                count++;
+                thisPeriod++;
+                if (sumCounter==period){
+                    temp.setTotalCost(setup);
+                    sumCounter++;
+                }
+            }
+            else
+            {
+                data restPart = listRow.get(thisPeriod-2);
+                int demand = listDemand[sumCounter];
+
+                int sum=0;
+                double sumTotal=0;
+                int a=0;
+
+                int tSebelum = restPart.getT();
+                double ssSebelum = restPart.getSavingSum();
+                // System.out.println("ini t sebelum "+tSebelum);
+                // System.out.println("ini ss sebelum "+ssSebelum);
+                // System.out.println("ini demand "+demand);
+                double ssNow = ssSebelum+(tSebelum*listDemand[sumCounter]);
+                // System.out.println("ini sumcounter "+sumCounter);
+                // System.out.println("ini demand "+listDemand[sumCounter]);
+                double ongkos = ssNow*saving;
+                double totalCost= setup+ongkos;
+                double TCUT = totalCost/count;
+
+                temp.setPeriod(thisPeriod);
+                temp.setT(count);
+                temp.setTotalSetup(setup);
+                temp.setSavingSum(ssNow);
+                temp.setSavingFee(ongkos);
+                temp.setDiff(TCUT);
+                temp.setTotalCost(totalCost);
+                if (TCUT <= restPart.getDiff()){
+                    temp.setStatus("Next");
+                    count++;
+                    thisPeriod++;
+                    sumCounter++;
+                    if (sumCounter==period){
+                        sumCounter++;
+                    }
+
+                }
+                else{
+                    temp.setStatus("Stop");
+                    count=1;
+                    thisPeriod++;
+                    sumCounter++;
+
+                }
+            }
+            listRow.add(temp);
+            // System.out.println(temp.getPeriod());
+            // System.out.println(temp.getT());
+            // System.out.println(temp.getTotalSetup());
+            // System.out.println(temp.getSavingSum());
+            // System.out.println(temp.getSavingFee());
+            // System.out.println(temp.getDiff());
+            // System.out.println(temp.getTotalCost());
+            // System.out.println(temp.getStatus());
+        }
+
+        double total = 0;
+        int j = 1;
+        for(int i = 0; i<listRow.size(); i++)
+        {
+            // System.out.println(listRow.get(i).getTotalCost());
+            if(listRow.get(i).getStatus()=="Stop"){
+                resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(i-1).getTotalCost());
+                j++;
+                total+=listRow.get(i-1).getTotalCost();
+            }
+        }
+        total+=listRow.get(listRow.size()-1).getTotalCost();
+        resultModif.add("Pemesanan ke-"+j+" = "+listRow.get(listRow.size()-1).getTotalCost());
+        resultModif.add("Total Cost = "+total);
+        long endTime = System.nanoTime();
+
+        // get difference of two nanoTime values
+        long timeElapsed = endTime - startTime;
+        resultModif.add("Execution time in nanoseconds  : " + timeElapsed);
+
+        resultModif.add("Execution time in milliseconds : " +
+                timeElapsed / 1000000);
+        allTotalCost.add(total);
+        allTime.add(timeElapsed/ 1000000);
+        return resultModif;
+    
     }
 
     private List countModif(int[] listDemand) {
