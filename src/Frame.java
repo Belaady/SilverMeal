@@ -541,7 +541,7 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingFee(0);
                 temp.setDiff(setup);
                 temp.setStatus("Next");
-                temp.setTotalCost(0);
+                temp.setTotalCost(setup);
                 temp.setSum(listDemand[section]);
 
 
@@ -611,23 +611,30 @@ class Frame extends JFrame implements ActionListener {
 
         double total = 0;
         int j = 1;
+        
+        //To Check in Terminal
         for(int r = 0; r<listRow.size(); r++)
         {
-            System.out.println("INI SUM index "+r+"Sejumlah "+listRow.get(r).getSum());
+            // System.out.println("INI SUM index "+r+"Sejumlah "+listRow.get(r).getSum());
+            // System.out.println("INI totalcost index "+r+" Sejumlah "+listRow.get(r).getTotalCost() + " Ongkos simpan "+ listRow.get(r).getSavingFee());
         }
         for(int i = 0; i<listRow.size(); i++)
         {
             if(listRow.get(i).getStatus()=="Stop"){
-                System.out.println("Ini Dalem Loop " + listRow.get(i-1).getSum());
+                
                 resultModif.add("Beli pada periode "+listRow.get(i-1).getPeriod()+" sejumlah "+listRow.get(i-1).getSum());
+                System.out.println("INI totalcost periode "+listRow.get(i-1).getPeriod()+" Sejumlah "+listRow.get(i-1).getTotalCost() + " Ongkos simpan "+ listRow.get(i-1).getSavingFee());
                 j++;
                 total+=listRow.get(i-1).getTotalCost();
+                
             }
         }
+        System.out.println("INI cost index terakhir " + listRow.get(listRow.size()-1).getTotalCost());
         total+=listRow.get(listRow.size()-1).getTotalCost();
-        // total = Math.round((total  * 100.0) / 100.0);
+
         resultModif.add("Beli pada periode "+listRow.get(listRow.size()-1).getPeriod()+" sejumlah "+listRow.get(listRow.size()-1).getSum());
-        System.out.println("INI diluar loop ori " + listRow.get(listRow.size()-1).getSum());
+
+       
         resultModif.add("Total Cost = "+ total);
         long endTime = System.nanoTime();
 
