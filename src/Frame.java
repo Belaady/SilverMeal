@@ -237,13 +237,18 @@ class Frame extends JFrame implements ActionListener {
 
         //If Button Submit Pressed
         if (e.getSource() == sub) {
-
+            try{
+                String def =" ";
+                res.setText(def);
             //Clear Existing Row
             if(tableModel.getRowCount()!=0){
                 for (int x = tableModel.getRowCount() - 1; x > -1; x--) {
                     tableModel.removeRow(x);
                 }
             }
+            int period = Integer.parseInt(tperiod.getText());
+            double setup = Double.parseDouble(tsetup.getText());
+            double saving = Double.parseDouble(tsaving.getText());
 
             String data                                                     //Get String Input Data
                     = "Period : "
@@ -254,7 +259,7 @@ class Frame extends JFrame implements ActionListener {
                     + tsaving.getText() + "\n";
 
             //Create table
-            int period = Integer.parseInt(tperiod.getText());
+            
             for(int i =0; i<period; i++){
                 tableModel.addRow(new Object[] { i+1});
             }
@@ -262,6 +267,11 @@ class Frame extends JFrame implements ActionListener {
             //Display Input Data
             tout.setText(data);
             tout.setEditable(false);
+        } catch(Exception error) {
+            System.out.println("NumberFormatException");
+            res.setText("Input not valid!");   
+        }
+
         }
 
         //If Button Reset Pressed
@@ -286,94 +296,94 @@ class Frame extends JFrame implements ActionListener {
 
         //If Button Calculate pressed
         else if (e.getSource() == calculate) {
+            try{
 
-            //Clear Existing Output
-            String def = "";
-            res.setText(def);
-            resModif.setText(def);
-            resSM.setText(def);
-            resWW.setText(def);
-            compareCost.setText(def);
-            compareTime.setText(def);
-            allTotalCost = new ArrayList<Double>();
-            allTime = new ArrayList<Long>();
+                //Clear Existing Output
+                String def = "";
+                res.setText(def);
+                resModif.setText(def);
+                resSM.setText(def);
+                resWW.setText(def);
+                compareCost.setText(def);
+                compareTime.setText(def);
+                allTotalCost = new ArrayList<Double>();
+                allTime = new ArrayList<Long>();
 
-            int[] listDemand = new int[tableModel.getRowCount()];
+                int[] listDemand = new int[tableModel.getRowCount()];
 
-            //Get demand
-            for(int i =0; i<tableModel.getRowCount(); i++){
-                listDemand[i] = Integer.parseInt(tableModel.getValueAt(i,1).toString()); 
-            }
+                //Get demand
+                for(int i =0; i<tableModel.getRowCount(); i++){
+                    listDemand[i] = Integer.parseInt(tableModel.getValueAt(i,1).toString()); 
+                }
 
-            //Get table data and input
-            Vector dataTable =  tableModel.getDataVector();
-            double setup = Double.parseDouble(tsetup.getText());
-            double saving = Double.parseDouble(tsaving.getText());
+                //Get table data and input
+                Vector dataTable =  tableModel.getDataVector();
+                double setup = Double.parseDouble(tsetup.getText());
+                double saving = Double.parseDouble(tsaving.getText());
 
-
-
-            List resultww = countWW(listDemand);                //DO count WW
-            StringBuilder strWw = new StringBuilder();
-            for (int v=0; v< resultww.size();v++){
-                strWw.append(String.valueOf(resultww.get(v))+"\n");
-                
-                System.out.println(resultww.get(v));         //Check data ww
-
-            }
-
-            String dataWW = strWw.toString();
-            resWW.setText(dataWW);                          //Display data WW
-            resWW.setEditable(false);
-
-            List resultSM = countSM(listDemand);                //DO Count SM Ori
-            StringBuilder strSM = new StringBuilder();
-
-            for (int v=0; v< resultSM.size();v++){
-                strSM.append(String.valueOf(resultSM.get(v))+"\n");     //Check data SM Ori
-                System.out.println(resultSM.get(v));
-            }
-
-            String hasil = strSM.toString();
-            resSM.setText(hasil);                                //Display data WW
-            resSM.setEditable(false);
-        
-
-            List resultModif = countModif(listDemand);                  //DO Count SM Modif
-            StringBuilder strModif = new StringBuilder();
-            for (int v=0; v< resultModif.size();v++){
-                strModif.append(String.valueOf(resultModif.get(v))+"\n");       
-                System.out.println(resultModif.get(v));                 //Check data SM Modif
-            }
-
-            String hasil2 = strModif.toString();
-            resModif.setText(hasil2);                                   //Display data SM Modif
-            resModif.setEditable(false);
-
-            String dataCost                                             //Get string data cost
-                    = "Total Cost Terendah : \n"
-                    + "WW : " + allTotalCost.get(0)+ " \n"
-                    + "SM Modif : "
-                    + allTotalCost.get(2)+ "\n"
-                    + "SM Ori : "
-                    + allTotalCost.get(1)+ "\n";
-            compareCost.append(dataCost);
-            
-            String datatime                                             //Get string data time
-                    = "Runtime Tercepat : \n"
-                    + "SM Modif : " + allTime.get(2)+ "ms \n"
-                    + "SM Ori : " + allTime.get(1)+ "ms \n"
-                    + "WW : "
-                    + allTime.get(0)+ "ms \n";
-            compareTime.append(datatime);                               
+                List resultww = countWW(listDemand);                //DO count WW
+                StringBuilder strWw = new StringBuilder();
+                for (int v=0; v< resultww.size();v++){
+                    strWw.append(String.valueOf(resultww.get(v))+"\n");
                     
-            System.out.println(allTotalCost);                           //Check All Total Cost in Terminal
-            System.out.println(allTime);                                //Check All Time in Terminal
+                    System.out.println(resultww.get(v));         //Check data ww
 
-            res.setText("Calculation success!");                        //Label Calculation done and success
+                }
 
+                String dataWW = strWw.toString();
+                resWW.setText(dataWW);                          //Display data WW
+                resWW.setEditable(false);
+
+                List resultSM = countSM(listDemand);                //DO Count SM Ori
+                StringBuilder strSM = new StringBuilder();
+
+                for (int v=0; v< resultSM.size();v++){
+                    strSM.append(String.valueOf(resultSM.get(v))+"\n");     //Check data SM Ori
+                    System.out.println(resultSM.get(v));
+                }
+
+                String hasil = strSM.toString();
+                resSM.setText(hasil);                                //Display data WW
+                resSM.setEditable(false);
+            
+                List resultModif = countModif(listDemand);                  //DO Count SM Modif
+                StringBuilder strModif = new StringBuilder();
+                for (int v=0; v< resultModif.size();v++){
+                    strModif.append(String.valueOf(resultModif.get(v))+"\n");       
+                    System.out.println(resultModif.get(v));                 //Check data SM Modif
+                }
+
+                String hasil2 = strModif.toString();
+                resModif.setText(hasil2);                                   //Display data SM Modif
+                resModif.setEditable(false);
+
+                String dataCost                                             //Get string data cost
+                        = "Total Cost : \n"
+                        + "WW : " + allTotalCost.get(0)+ " \n"
+                        + "SM Modif : "
+                        + allTotalCost.get(2)+ "\n"
+                        + "SM Ori : "
+                        + allTotalCost.get(1)+ "\n";
+                compareCost.append(dataCost);
+                
+                String datatime                                             //Get string data time
+                        = "Runtime : \n"
+                        + "SM Modif : " + allTime.get(2)+ "ms \n"
+                        + "SM Ori : " + allTime.get(1)+ "ms \n"
+                        + "WW : "
+                        + allTime.get(0)+ "ms \n";
+                compareTime.append(datatime);                               
+                        
+                System.out.println(allTotalCost);                           //Check All Total Cost in Terminal
+                System.out.println(allTime);                                //Check All Time in Terminal
+
+                res.setText("Calculation success!");                        //Label Calculation done and success
+        } catch(Exception error) {
+        System.out.println("NumberFormatException");
+        res.setText("Input not valid!");
         }
-
     }
+ }
 
     //Calculation for Wagner-Within
     private List countWW(int[] listDemand) {
@@ -531,8 +541,9 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingFee(0);
                 temp.setDiff(setup);
                 temp.setStatus("Next");
-                temp.setQuantity(listDemand[0]);
                 temp.setTotalCost(0);
+                temp.setSum(listDemand[section]);
+
 
                 count++;
                 thisPeriod++;
@@ -552,12 +563,9 @@ class Frame extends JFrame implements ActionListener {
 
                 int tSebelum = restPart.getT();
                 double ssSebelum = restPart.getSavingSum();
-                // System.out.println("ini t sebelum "+tSebelum);
-                // System.out.println("ini ss sebelum "+ssSebelum);
-                // System.out.println("ini demand "+demand);
+
                 double ssNow = ssSebelum+(tSebelum*listDemand[sumCounter]);
-                // System.out.println("ini sumcounter "+sumCounter);
-                // System.out.println("ini demand "+listDemand[sumCounter]);
+
                 double ongkos = ssNow*saving;
                 double totalCost= setup+ongkos;
                 double TCUT = totalCost/count;
@@ -568,11 +576,10 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingSum(ssNow);
                 temp.setSavingFee(ongkos);
                 temp.setDiff(TCUT);
-                temp.setTotalCost(Math.round(totalCost  * 100.0) / 100.0);
+                temp.setTotalCost(Math.round((totalCost  * 100.0) / 100.0));
                 
                 for(int x = section; x<=sumCounter; x++)
                 {
-                    // System.out.println("ini yg di sum "+listDemand[x]);
                     sum+=listDemand[x];
                     a++;
                 }
@@ -592,36 +599,36 @@ class Frame extends JFrame implements ActionListener {
                     temp.setStatus("Stop");
                     count=1;
                     thisPeriod++;
-                    sumCounter++;
                     section=sumCounter;
+                    sumCounter++;
+
 
                 }
             }
             listRow.add(temp);
-            // System.out.println(temp.getPeriod());
-            // System.out.println(temp.getT());
-            // System.out.println(temp.getTotalSetup());
-            // System.out.println(temp.getSavingSum());
-            // System.out.println(temp.getSavingFee());
-            // System.out.println(temp.getDiff());
-            // System.out.println(temp.getTotalCost());
-            // System.out.println(temp.getStatus());
+ 
         }
 
         double total = 0;
         int j = 1;
+        for(int r = 0; r<listRow.size(); r++)
+        {
+            System.out.println("INI SUM index "+r+"Sejumlah "+listRow.get(r).getSum());
+        }
         for(int i = 0; i<listRow.size(); i++)
         {
-            // System.out.println(listRow.get(i).getTotalCost());
             if(listRow.get(i).getStatus()=="Stop"){
+                System.out.println("Ini Dalem Loop " + listRow.get(i-1).getSum());
                 resultModif.add("Beli pada periode "+listRow.get(i-1).getPeriod()+" sejumlah "+listRow.get(i-1).getSum());
                 j++;
                 total+=listRow.get(i-1).getTotalCost();
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
+        // total = Math.round((total  * 100.0) / 100.0);
         resultModif.add("Beli pada periode "+listRow.get(listRow.size()-1).getPeriod()+" sejumlah "+listRow.get(listRow.size()-1).getSum());
-        resultModif.add("Total Cost = "+total);
+        System.out.println("INI diluar loop ori " + listRow.get(listRow.size()-1).getSum());
+        resultModif.add("Total Cost = "+ total);
         long endTime = System.nanoTime();
 
         // get difference of two nanoTime values
@@ -664,9 +671,9 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingFee(0);
                 temp.setDiff(setup);
                 temp.setStatus("Next");
-                temp.setQuantity(listDemand[section]);
                 temp.setTotalCost(0);
                 temp.setSum(listDemand[section]);
+
 
                 count++;
                 thisPeriod++;
@@ -686,21 +693,15 @@ class Frame extends JFrame implements ActionListener {
                 
                 for(int x = section; x<=sumCounter; x++)
                 {
-                    // System.out.println("ini yg di sum "+listDemand[x]);
+
                     sum+=listDemand[x];
                     sumTotal+=listDemand[x]*(a);
                     a++;
                 }
 
-                // System.out.println("ini sum nya datanya dibawah"+sum);
-                // System.out.println("ini section "+section);
-                // System.out.println("ini count "+sumCounter);
 
                 int tSebelum = restPart.getT();
                 double ssSebelum = restPart.getSavingSum();
-                // System.out.println("ini t sebelum "+tSebelum);
-                // System.out.println("ini ss sebelum "+ssSebelum);
-                // System.out.println("ini demand "+demand);
                 double ssNow = ssSebelum+(tSebelum*(demand*sum));
                 double ongkos =saving*ssNow/sum;
                 double selisih = Math.abs(setup-ongkos);
@@ -712,7 +713,7 @@ class Frame extends JFrame implements ActionListener {
                 temp.setSavingSum(ssNow);
                 temp.setSavingFee(ongkos);
                 temp.setDiff(selisih);
-                temp.setTotalCost(Math.round(totalCost  * 100.0) / 100.0);
+                temp.setTotalCost(Math.round((totalCost  * 100.0) / 100.0));
                 temp.setSum((int) Math.round(sum));
 
                 if (selisih <= restPart.getDiff()){
@@ -735,21 +736,13 @@ class Frame extends JFrame implements ActionListener {
                 }
             }
             listRow.add(temp);
-            // System.out.println(temp.getPeriod());
-            // System.out.println(temp.getT());
-            // System.out.println(temp.getTotalSetup());
-            // System.out.println(temp.getSavingSum());
-            // System.out.println(temp.getSavingFee());
-            // System.out.println(temp.getDiff());
-            // System.out.println(temp.getTotalCost());
-            // System.out.println(temp.getStatus());
         }
 
         double total = 0;
         int j = 1;
         for(int i = 0; i<listRow.size(); i++)
         {
-            // System.out.println(listRow.get(i).getTotalCost());
+
             if(listRow.get(i).getStatus()=="Stop"){
                 resultModif.add("Beli pada periode "+listRow.get(i-1).getPeriod()+" sejumlah "+listRow.get(i-1).getSum());
                 j++;
@@ -757,8 +750,9 @@ class Frame extends JFrame implements ActionListener {
             }
         }
         total+=listRow.get(listRow.size()-1).getTotalCost();
+        // total = Math.round((total  * 100.0) / 100.0);
         resultModif.add("Beli pada periode "+listRow.get(listRow.size()-1).getPeriod()+" sejumlah "+listRow.get(listRow.size()-1).getSum());
-        resultModif.add("Total Cost = "+total);
+        resultModif.add("Total Cost = "+ total);
         long endTime = System.nanoTime();
 
         //get difference of two nanoTime values

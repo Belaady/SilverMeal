@@ -10,7 +10,6 @@ public class data {
     public double Diff;
     public String Status;
     public double TotalCost;
-    public double Quantity;
 
     public int getPeriod() {
         return Period;
@@ -28,7 +27,7 @@ public class data {
         T = t;
     }
 
-    public double getSum() {
+    public int getSum() {
         return Sum;
     }
 
@@ -82,13 +81,5 @@ public class data {
 
     public void setTotalCost(double totalCost) {
         TotalCost = totalCost;
-    }
-
-    public double getQuantity() {
-        return Quantity;
-    }
-
-    public void setQuantity(double quantity) {
-        Quantity = quantity;
     }
 }
